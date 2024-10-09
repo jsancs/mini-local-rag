@@ -1,8 +1,11 @@
-import argparse
+from typing import Generator
 import ollama
 
 
 SYS_PROMPT = "You are a knowledgeable, efficient, and direct AI assistant. Provide concise answers, focusing on the key information needed. Offer suggestions tactfully when appropriate to improve outcomes. Engage in productive collaboration with the user."
+CONVERSATION_HISTORY = [
+    {"role": "assistant", "content": SYS_PROMPT},
+]
 
 
 def check_model_exists(model_name: str) -> bool:
@@ -24,48 +27,28 @@ def pull_model(model_name: str) -> None:
         raise ValueError("Model not found. Please provide a valid model name.")
 
 
-def chat_streaming(query: str, model: str) -> None:
+def chat_streaming(query: str, model: str) -> Generator[str, None, None]:
     stream = ollama.chat(
         model=model,
         messages=[
-            {"role": "assistant", "content": SYS_PROMPT},
+            *CONVERSATION_HISTORY,
             {"role": "user", "content": query},
         ],
         stream=True,
     )
 
     for chunk in stream:
-        print(chunk["message"]["content"], end="", flush=True)
+        yield chunk["message"]["content"]
 
 
-def handle_model(model_name):
+def handle_model(model_name: str) -> None:
     model_exists = check_model_exists(model_name)
     if not model_exists:
         pull_model(model_name)
 
 
-def parse_arguments():
-    parser = argparse.ArgumentParser(description="Chat with an AI assistant.")
-
-    parser.add_argument("-q", "--query", type=str, help="Query to chat about.", required=True)
-    parser.add_argument("-m", "--model", type=str, default="llama3.2:1b", help="Model to use.")
-    
-    return parser.parse_args()
-
-
-def main():
-    args = parse_arguments()
-    
-    model_name = args.model
-    user_query = args.query
-    
-    handle_model(model_name)
-    
-    if user_query:
-        chat_streaming(user_query, model_name)
-    else:
-        raise ValueError("Please provide a query to chat about.")
-    
-
-if __name__ == "__main__":
-    main()
+def add_msg_to_memory(user_query: str, model_response: str) -> None:
+    CONVERSATION_HISTORY.extend([
+        {"role": "user", "content": user_query},
+        {"role": "assistant", "content": model_response},
+    ])
