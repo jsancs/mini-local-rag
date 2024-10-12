@@ -1,7 +1,8 @@
 import argparse
 from prompt_toolkit.shortcuts import prompt
 
-from chat import chat_streaming, handle_model, add_msg_to_memory
+from chat import chat_streaming, add_msg_to_memory
+from utils import handle_model
 
 
 def show_help():
