@@ -3,6 +3,7 @@ from typing import List
 import ollama
 import os
 import numpy as np
+from models import Chunk
 
 
 def create_collection(
@@ -10,19 +11,19 @@ def create_collection(
     collection_name: str,
 ) -> None:
     print(f"Creating collection: {collection_name}...")
-    embeddings: List[float] = []
+    records: List[Chunk] = []
 
     for doc_path in doc_paths:
         with open(doc_path, "r") as f:
             text = f.read()
             emb = _generate_embeddings(text)
-            embeddings.append(emb)
+            records.append(Chunk(doc_path, text, emb))
 
-    embeddings = np.array(embeddings)
+    records_np = np.array(records)
     
     if not os.path.exists("collections"):
         os.makedirs("collections")
-    np.save(f"collections/{collection_name}.npy", embeddings)
+    np.save(f"collections/{collection_name}.npy", records_np)
 
 
 def _generate_embeddings(
