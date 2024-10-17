@@ -2,16 +2,17 @@ import argparse
 from typing import List
 from prompt_toolkit.shortcuts import prompt
 
-from chat import chat_streaming, add_msg_to_memory
+from chat import chat_streaming, add_msg_to_memory, clear_conversation
 from embeddings import create_collection
 from utils import handle_model
 
 
 def show_help():
     print("Commands:")
-    print("/bye - Exit the chat")
+    print("/clear - Clear the chat history and starts a new conversation")
     print("/add - Add document to the model's memory")
     print("/help - Show this help message")
+    print("/bye - Exit the chat")
     print("ctrl + c - Stop the model from responding")
     print("ctrl + d - Exit the chat")
     print()
@@ -45,6 +46,8 @@ def handle_user_query(user_query: str, model_name: str) -> None:
     if user_query == "/bye":
         print("Goodbye!")
         exit()
+    elif user_query == "/clear":
+        clear_conversation()
     elif user_query == "/help" or user_query == "/?":
         show_help()
     elif user_query == "/add":

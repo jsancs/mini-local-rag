@@ -27,3 +27,11 @@ def add_msg_to_memory(user_query: str, model_response: str) -> None:
         {"role": "user", "content": user_query},
         {"role": "assistant", "content": model_response},
     ])
+
+
+def clear_conversation() -> None:
+    print("Clearing conversation history...")
+    global CONVERSATION_HISTORY
+    CONVERSATION_HISTORY = [
+        {"role": "assistant", "content": SYS_PROMPT},
+    ]
