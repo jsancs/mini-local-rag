@@ -32,7 +32,7 @@ def add_documents() -> List[str]:
     doc_paths = []
     while True:
         doc_path = prompt(
-            "Local path to document document (/done to finish): ",
+            "Local path to document document (file or dir) (/done to finish): ",
         )
         if doc_path == "/done":
             break

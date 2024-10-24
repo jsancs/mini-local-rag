@@ -20,7 +20,7 @@ There is 1 configurable param: <br>
 * Type `/bye` to stop the chat.
 * Type `/help` to show all the commands.
 * Type `/add` to create a collection.
-    * You'll be asked to enter the paths for all the documents for the collection.
+    * You'll be asked to enter the paths for all the documents for the collection. You can enter specific files or directories, in which case it will process all the files within the directory.
     * Once you have entered all the docs, type `/stop` to interrupt the process.
     * You will be asked to introduce a coleccion name.
     * Then the embeddings will be generated and stored in a .npy file for future reference. The embeddings will be stored in memory with numpy.
