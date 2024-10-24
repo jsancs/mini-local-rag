@@ -28,7 +28,7 @@ def generate_response(user_query: str, model_name: str) -> None:
 
     add_msg_to_memory(user_query, model_response)
 
-def add_document() -> List[str]:
+def add_documents() -> List[str]:
     doc_paths = []
     while True:
         doc_path = prompt(
@@ -52,7 +52,7 @@ def handle_user_query(user_query: str, model_name: str) -> None:
         show_help()
     elif user_query == "/add":
         collection_name = ""
-        documents = add_document()
+        documents = add_documents()
         if documents:
             collection_name = prompt(
                 "Enter a name for the collection: ",

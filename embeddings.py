@@ -31,7 +31,18 @@ def _process_document(
         emb = _generate_embeddings(chunk)
         chunks.append(Chunk(doc_path, chunk, emb))
 
-    return chunks    
+    return chunks
+
+
+def _process_folder(
+    folder_path: str,
+) -> List[Chunk]:
+    doc_paths = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if f.endswith(".txt")]
+    chunks = []
+    for doc_path in doc_paths:
+        doc_chunks = _process_document(doc_path)
+        chunks.extend(doc_chunks)
+    return chunks
 
 
 def _generate_embeddings(
@@ -65,7 +76,10 @@ def create_collection(
     records: List[Chunk] = []
 
     for doc_path in doc_paths:
-        doc_chunks = _process_document(doc_path)
+        if os.path.isdir(doc_path):
+            doc_chunks = _process_folder(doc_path)
+        else:
+            doc_chunks = _process_document(doc_path)
         records.extend(doc_chunks)
 
     _save_embeddings(records, collection_name)
