@@ -67,6 +67,18 @@ def _save_embeddings(
         os.makedirs(COLLECTIONS_DIR)
     np.save(f"{COLLECTIONS_DIR}/{collection_name}.npy", records_np)
     
+    
+def similarity_search(
+    query: str,
+    collection: List[Chunk],
+    top_k: int = 5,
+) -> str:
+    query_emb = _generate_embeddings(query)
+    for record in collection:
+        record.similarity = np.dot(record.embedding, query_emb)
+    collection.sort(key=lambda x: x.similarity, reverse=True)
+    return " ".join([record.text for record in collection[:top_k]])
+
 
 def create_collection(
     doc_paths: List[str],
@@ -84,3 +96,14 @@ def create_collection(
 
     _save_embeddings(records, collection_name)
     print(f"Collection {collection_name} created")
+
+
+def load_collection(
+    collection_name: str,
+) -> List[Chunk]:
+    try:
+        records = np.load(f"{COLLECTIONS_DIR}/{collection_name}.npy", allow_pickle=True)
+        return records.tolist()
+    except FileNotFoundError:
+        print(f"Collection {collection_name} not found")
+        return []

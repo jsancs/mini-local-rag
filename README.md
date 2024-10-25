@@ -24,6 +24,8 @@ There is 1 configurable param: <br>
     * Once you have entered all the docs, type `/stop` to interrupt the process.
     * You will be asked to introduce a coleccion name.
     * Then the embeddings will be generated and stored in a .npy file for future reference. The embeddings will be stored in memory with numpy.
+* Type `/activate` to load and use a collection.
+* Type `/deactivate` to deactivate the active collection.
 
 > [!Note]  
 > For the moment, only .txt files are supported. More extensions will be available soon :)

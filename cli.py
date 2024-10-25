@@ -1,16 +1,21 @@
 import argparse
-from typing import List
+from typing import List, Optional
 from prompt_toolkit.shortcuts import prompt
 
 from chat import chat_streaming, add_msg_to_memory, clear_conversation
-from embeddings import create_collection
+from embeddings import create_collection, load_collection, similarity_search
 from utils import handle_model
+
+
+COLLECTION_ACTIVE = None
 
 
 def show_help():
     print("Commands:")
     print("/clear - Clear the chat history and starts a new conversation")
     print("/add - Add document to the model's memory")
+    print("/activate <collection_name> - Activate a collection")
+    print("/deactivate - Deactivate the active collection")
     print("/help - Show this help message")
     print("/bye - Exit the chat")
     print("ctrl + c - Stop the model from responding")
@@ -18,10 +23,14 @@ def show_help():
     print()
 
 
-def generate_response(user_query: str, model_name: str) -> None:
+def generate_response(
+        user_query: str,
+        model_name: str,
+        context: Optional[str] = None,
+    ) -> None:
     model_response = "" 
 
-    for chunk in chat_streaming(user_query, model_name):
+    for chunk in chat_streaming(user_query, model_name, context):
         model_response += chunk
         print(chunk, end="", flush=True)
     print()
@@ -43,6 +52,7 @@ def add_documents() -> List[str]:
     return doc_paths
 
 def handle_user_query(user_query: str, model_name: str) -> None:
+    global COLLECTION_ACTIVE
     if user_query == "/bye":
         print("Goodbye!")
         exit()
@@ -50,22 +60,33 @@ def handle_user_query(user_query: str, model_name: str) -> None:
         clear_conversation()
     elif user_query == "/help" or user_query == "/?":
         show_help()
+    elif user_query.startswith("/activate"):
+        collection_name = user_query.split(" ")[1]
+        COLLECTION_ACTIVE = load_collection(collection_name)
+        if COLLECTION_ACTIVE:
+            print(f"Collection {collection_name} activated.")
+        else:
+            print(f"Collection {collection_name} not found.")
+    elif user_query == "/deactivate":
+        COLLECTION_ACTIVE = None
+        print("Collection deactivated.")
     elif user_query == "/add":
         collection_name = ""
         documents = add_documents()
         if documents:
             collection_name = prompt(
-                "Enter a name for the collection: ",
+                "Enter a name   for the collection: ",
             )
 
         print(f"Adding documents to collection: {collection_name}")
         print(f"Docs selected: {documents}")
 
         create_collection(documents, collection_name)
-
-
     else:
-        generate_response(user_query, model_name)
+        context = None
+        if COLLECTION_ACTIVE:
+            context = similarity_search(user_query, COLLECTION_ACTIVE)
+        generate_response(user_query, model_name, context)
 
 
 def chat_cli(model_name: str) -> None:
