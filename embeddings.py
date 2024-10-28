@@ -107,3 +107,9 @@ def load_collection(
     except FileNotFoundError:
         print(f"Collection {collection_name} not found")
         return []
+    
+def list_collections() -> None:
+    collections = [f.split(".")[0] for f in os.listdir(COLLECTIONS_DIR)]
+    
+    print("Available collections:")
+    print(collections)

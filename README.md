@@ -26,6 +26,7 @@ There is 1 configurable param: <br>
     * Then the embeddings will be generated and stored in a .npy file for future reference. The embeddings will be stored in memory with numpy.
 * Type `/activate` to load and use a collection.
 * Type `/deactivate` to deactivate the active collection.
+* Type `/list` to list available collections.
 
 > [!Note]  
 > For the moment, only .txt files are supported. More extensions will be available soon :)
