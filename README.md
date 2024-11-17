@@ -30,3 +30,20 @@ There is 1 configurable param: <br>
 
 > [!Note]  
 > For the moment, only .txt files are supported. More extensions will be available soon :)
+
+
+### Roadmap
+These are the next steps I plan to take:
+
+- [ ] Support for more files (see section below)
+- [ ] Testing
+- [ ] Improve index algorithm
+- [ ] Performance metrics (speed, storage, scalability, ...)
+- [ ] UI (somthing very light and simple)
+
+Feel free to suggest any other relevant topic or idea to be included in the code (contributions are also welcome)
+
+
+### Supported files
+
+* .txt
