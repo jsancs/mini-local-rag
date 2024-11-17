@@ -28,9 +28,6 @@ There is 1 configurable param: <br>
 * Type `/deactivate` to deactivate the active collection.
 * Type `/list` to list available collections.
 
-> [!Note]  
-> For the moment, only .txt files are supported. More extensions will be available soon :)
-
 
 ### Roadmap
 These are the next steps I plan to take:
