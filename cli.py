@@ -3,11 +3,12 @@ from typing import List, Optional
 from prompt_toolkit.shortcuts import prompt
 
 from chat import chat_streaming, add_msg_to_memory, clear_conversation
-from embeddings import create_collection, load_collection, list_collections, similarity_search
+from services.collection_service import CollectionService
+from services.rag_service import RagService
 from utils import handle_model
 
 
-COLLECTION_ACTIVE = None
+collection_service = CollectionService()
 
 
 def show_help():
@@ -63,7 +64,8 @@ def get_documents() -> List[str]:
 
 
 def handle_user_query(user_query: str, model_name: str) -> None:
-    global COLLECTION_ACTIVE
+
+    print(collection_service.active_collection)
 
     if user_query == "/bye":
         print("Goodbye!")
@@ -74,16 +76,12 @@ def handle_user_query(user_query: str, model_name: str) -> None:
         show_help()
     elif user_query.startswith("/activate"):
         collection_name = user_query.split(" ")[1]
-        COLLECTION_ACTIVE = load_collection(collection_name)
-        if COLLECTION_ACTIVE:
-            print(f"Collection {collection_name} activated.")
-        else:
-            print(f"Collection {collection_name} not found.")
+        collection_service.load_collection(collection_name)
     elif user_query == "/list":
-        list_collections()
+        collection_service.list_collections()
     elif user_query == "/deactivate":
-        COLLECTION_ACTIVE = None
         print("Collection deactivated.")
+        collection_service.active_collection = None
     elif user_query == "/add":
         collection_name = ""
         documents = get_documents()
@@ -95,9 +93,13 @@ def handle_user_query(user_query: str, model_name: str) -> None:
         print(f"Adding documents to collection: {collection_name}")
         print(f"Docs selected: {documents}")
 
-        create_collection(documents, collection_name)
+        collection_service.create_collection(documents, collection_name)
     else:
-        context = similarity_search(user_query, COLLECTION_ACTIVE) if COLLECTION_ACTIVE else None
+        if collection_service.active_collection:
+            context = RagService.similarity_search(user_query, collection_service.active_collection)
+            print(f"Context: {context}")
+        else:
+            context = None
         generate_response(user_query, model_name, context)
 
 

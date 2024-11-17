@@ -24,18 +24,3 @@ def pull_model(model_name: str) -> None:
     except ollama.ResponseError as e:
         print(f"Error: {e}")
         raise ValueError("Model not found. Please provide a valid model name.")
-    
-    
-def read_document(doc_path: str) -> str:
-    try:
-        with open(doc_path, "r") as f:
-            text = f.read()
-    except FileNotFoundError:
-        print(f"File not found: {doc_path}")
-        return ""
-    except Exception as e:
-        print(f"Error reading file: {doc_path}")
-        print(e)
-        return ""
-    
-    return text
