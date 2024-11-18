@@ -32,6 +32,7 @@ There is 1 configurable param: <br>
 ### Roadmap
 These are the next steps I plan to take:
 
+- [ ] Support vision models
 - [ ] Support for more files (see section below)
 - [ ] Testing
 - [ ] Improve index algorithm
