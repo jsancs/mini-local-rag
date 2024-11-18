@@ -56,9 +56,7 @@ class CollectionService:
     def load_collection(self, collection_name: str) -> None:
         try:
             collection_path = f"{self.storage_path}/{collection_name}.npy"
-            print(collection_path)
             records = np.load(collection_path, allow_pickle=True)
-            print(f"Loading collection: {collection_name}..., {records.shape[0]} records")
             self.active_collection = records.tolist()
             print(f"Collection {collection_name} loaded")
         except FileNotFoundError:

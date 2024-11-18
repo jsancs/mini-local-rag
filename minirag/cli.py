@@ -65,8 +65,6 @@ def get_documents() -> List[str]:
 
 def handle_user_query(user_query: str, model_name: str) -> None:
 
-    print(collection_service.active_collection)
-
     if user_query == "/bye":
         print("Goodbye!")
         exit()
@@ -97,7 +95,6 @@ def handle_user_query(user_query: str, model_name: str) -> None:
     else:
         if collection_service.active_collection:
             context = RagService.similarity_search(user_query, collection_service.active_collection)
-            print(f"Context: {context}")
         else:
             context = None
         generate_response(user_query, model_name, context)
