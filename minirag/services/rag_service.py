@@ -2,7 +2,7 @@ import ollama
 import numpy as np
 from typing import List
 
-from models import Chunk
+from minirag.models import Chunk
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 

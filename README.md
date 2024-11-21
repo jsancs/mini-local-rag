@@ -45,3 +45,13 @@ Feel free to suggest any other relevant topic or idea to be included in the code
 ### Supported files
 
 * .txt
+
+
+### Testing (in progress)
+Testing has been done with pytest.
+
+To run all the tests:
+`python -m pytest tests`
+
+To generate coverage report:
+`python -m pytest --cov-report term --cov-report xml:coverage.xml --cov=minirag`

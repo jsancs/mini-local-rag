@@ -1,9 +1,10 @@
 import os
 import numpy as np
+from pathlib import Path
 from typing import List, Optional
 
-from models import Chunk
-from services.document_service import DocumentService
+from minirag.models import Chunk
+from minirag.services.document_service import DocumentService
 
 
 class CollectionService:
@@ -11,14 +12,14 @@ class CollectionService:
         self,
         storage_path: str = "collections",
     ) -> None:
-        self.storage_path = storage_path
+        self.storage_path = Path(storage_path)
         self.active_collection: Optional[List[Chunk]] = None
 
     def _process_folder(self, folder_path: str) -> List[Chunk]:
         doc_paths = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if f.endswith(".txt")]
         chunks = []
         for doc_path in doc_paths:
-            doc_chunks = DocumentService.process_document(doc_path)
+            doc_chunks = DocumentService.process_document(str(doc_path))
             chunks.extend(doc_chunks)
         return chunks
     
@@ -29,7 +30,6 @@ class CollectionService:
     ) -> None:
         
         records_np = np.array(doc_chunks)
-        
         if not os.path.exists(self.storage_path):
             os.makedirs(self.storage_path)
         np.save(f"{self.storage_path}/{collection_name}.npy", records_np)

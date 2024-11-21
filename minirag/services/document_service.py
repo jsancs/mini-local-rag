@@ -1,7 +1,7 @@
 from typing import List
 
-from models import Chunk
-from services.rag_service import RagService
+from minirag.models import Chunk
+from minirag.services.rag_service import RagService
 
 
 class DocumentService:
