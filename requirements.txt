@@ -2,5 +2,7 @@ ollama==0.3.3
 prompt_toolkit==3.0.48
 numpy==2.1.2
 langchain-text-splitters==0.3.0
+
 pytest==8.3.3
 pytest-cov=6.0.0
+pytest-mock==3.14.0
