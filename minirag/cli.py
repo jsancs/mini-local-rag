@@ -5,7 +5,7 @@ from prompt_toolkit.shortcuts import prompt
 from chat import chat_streaming, add_msg_to_memory, clear_conversation
 from services.collection_service import CollectionService
 from services.rag_service import RagService
-from utils import handle_model
+from minirag.utils.model_utils import handle_model
 
 
 collection_service = CollectionService()

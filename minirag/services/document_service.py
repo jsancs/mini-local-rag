@@ -1,4 +1,5 @@
 from typing import List
+import fitz
 
 from minirag.models import Chunk
 from minirag.services.rag_service import RagService
@@ -20,13 +21,32 @@ class DocumentService:
             return ""
         
         return text
+    
+    @staticmethod
+    def read_pdf_document(doc_path: str) -> str:
+        try:
+            with fitz.open(doc_path) as doc:
+                text = ""
+                for page in doc:
+                    text += page.get_text() + "\n"
+            return text
+        except FileNotFoundError:
+            print(f"PDF file not found: {doc_path}")
+            return ""
+        except Exception as e:
+            print(f"Error reading PDF file: {doc_path}")
+            print(e)
+            return ""
 
     @staticmethod
     def process_document(doc_path: str) -> List[Chunk]:
+
+        if doc_path.lower().endswith('.pdf'):
+            doc_text = DocumentService.read_pdf_document(doc_path)
+        else:
+            doc_text = DocumentService.read_document(doc_path)
         
-        doc_text = DocumentService.read_document(doc_path)
         splitter = RagService.get_splitter()
-        
         text_chunks = splitter.split_text(doc_text)
 
         chunks = []
