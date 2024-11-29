@@ -3,6 +3,7 @@ import fitz
 
 from minirag.models import Chunk
 from minirag.services.rag_service import RagService
+from minirag.utils.stats_utils import track_stats
 
 
 class DocumentService:
@@ -39,6 +40,7 @@ class DocumentService:
             return ""
 
     @staticmethod
+    @track_stats
     def process_document(doc_path: str) -> List[Chunk]:
 
         if doc_path.lower().endswith('.pdf'):
