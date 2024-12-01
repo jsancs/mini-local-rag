@@ -34,7 +34,7 @@ These are the next steps I plan to take:
 
 - [ ] Support vision models
 - [ ] Support for more files (see section below)
-- [ ] Testing
+- [X] Testing
 - [ ] Improve index algorithm
 - [ ] Performance metrics (speed, storage, scalability, ...)
 - [ ] UI (somthing very light and simple)
@@ -45,6 +45,7 @@ Feel free to suggest any other relevant topic or idea to be included in the code
 ### Supported files
 
 * .txt
+* .pdf
 
 
 ### Testing (in progress)

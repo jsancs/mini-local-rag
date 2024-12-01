@@ -2,6 +2,7 @@ import ollama
 import numpy as np
 from typing import List
 
+from minirag.utils.stats_utils import track_stats
 from minirag.models import Chunk
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
@@ -28,6 +29,7 @@ class RagService:
         return emb["embedding"]
 
     @staticmethod
+    @track_stats
     def similarity_search(
         query: str,
         collection: List[Chunk],
