@@ -1,5 +1,6 @@
 __pycache__/
 collections/
+evaluation/results/
 
 .vscode
 .DS_Store

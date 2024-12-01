@@ -9,6 +9,20 @@ def get_memory_usage():
     memory_info = process.memory_info()
     return memory_info.rss / (1024 * 1024)  # in MB
 
+import psutil
+import os
+import time
+from functools import wraps
+from typing import Callable, Any, Dict, List
+
+# Global dictionary to store stats
+function_stats: Dict[str, List[Dict[str, float]]] = {}
+
+def get_memory_usage():
+    process = psutil.Process(os.getpid())
+    memory_info = process.memory_info()
+    return memory_info.rss / (1024 * 1024)  # in MB
+
 def track_stats(func: Callable) -> Callable:
     @wraps(func)
     def wrapper(*args, **kwargs) -> Any:
@@ -20,12 +34,17 @@ def track_stats(func: Callable) -> Callable:
         end_time = time.time()
         end_memory = get_memory_usage()
         
-        execution_time = end_time - start_time
-        memory_used = end_memory - start_memory
+        stats = {
+            'execution_time': end_time - start_time,
+            'memory_used': end_memory - start_memory
+        }
         
-        print(f"Stats for {func.__name__}:")
-        print(f"  Execution time: {execution_time:.2f} seconds")
-        print(f"  Memory usage: {memory_used:.2f} MB")
+        # Initialize list for this function if it doesn't exist
+        if func.__name__ not in function_stats:
+            function_stats[func.__name__] = []
+            
+        # Store the stats
+        function_stats[func.__name__].append(stats)
         
         return result
     return wrapper
